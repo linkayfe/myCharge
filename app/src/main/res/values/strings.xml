@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">记账本</string>
+    <string name="name">用户名</string>
+    <string name="password">密码</string>
+    <string name="no_complete">请输入完整！</string>
+    <string name="no_same">两次密码不同！</string>
+    <string name="reg">还未注册？快点我注册吧</string>
+    <string name="password_sure">确认密码</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+</resources>
