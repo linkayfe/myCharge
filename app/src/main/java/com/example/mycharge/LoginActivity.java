@@ -16,13 +16,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity {
+import com.example.mycharge.bean.UserInfo;
+import com.example.mycharge.database.BillDBHelper;
+import com.example.mycharge.database.UserDBHelper;
+
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText username;
     private EditText userPassword;
     private Button login_bt;
     private TextView register;
-    private MyHandler handler;
+    private UserDBHelper userDBHelper;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,42 +42,71 @@ public class LoginActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //初始化控件对象
-        init();
+        username = (EditText) findViewById(R.id.username);
+        userPassword = (EditText) findViewById(R.id.userPassword);
+        login_bt = (Button) findViewById(R.id.login_bt);
+        register = (TextView) findViewById(R.id.register);
 
-        login_bt.setOnClickListener(new Click());
-        register.setOnClickListener(new Click());
+        login_bt.setOnClickListener(this);
+        register.setOnClickListener(this);
 
         login_bt.setOnTouchListener(new Touch());
         register.setOnTouchListener(new Touch());
 
     }
 
-    private class Click implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.login_bt:
-                    if("".equals(username.getText().toString()) || "".equals(userPassword.getText().toString()))
-                        Toast.makeText(getApplication(),getResources().getString(R.string.no_complete),Toast.LENGTH_SHORT).show();
-                    else {
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String account = username.getText().toString();
-                                String password = userPassword.getText().toString();
-                            }
-                        });
-                        thread.start();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.login_bt:
+                if("".equals(username.getText().toString())
+                        || "".equals(userPassword.getText().toString()))
+                    Toast.makeText(getApplication(),getResources()
+                            .getString(R.string.no_complete),Toast.LENGTH_SHORT).show();
+                else {
+                    String account = username.getText().toString();
+                    String password = userPassword.getText().toString();
+                    userDBHelper = UserDBHelper.getInstance(this);
+                    UserInfo userInfo = userDBHelper.queryByUserId(account,password);
+                    if (userInfo == null){
+                        Toast.makeText(getApplication(),getResources()
+                                .getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
+                    }else {
+                        Intent toCharge = new Intent(this,BillPagerActivity.class);
+                        toCharge.putExtra("username",account);
+                        startActivity(toCharge);
                     }
-                    break;
-                case R.id.register:
-                    Intent toReg = new Intent(LoginActivity.this, RegisterActivity.class);
-                    startActivityForResult(toReg,1);
-                    break;
-            }
+                }
+                break;
+            case R.id.register:
+                Intent toReg = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivityForResult(toReg,1);
+                break;
         }
     }
+
+//    private class Click implements View.OnClickListener {
+//
+//        @Override
+//        public void onClick(View v) {
+//            switch (v.getId()) {
+//                case R.id.login_bt:
+//                    if("".equals(username.getText().toString()) || "".equals(userPassword.getText().toString()))
+//                        Toast.makeText(getApplication(),getResources().getString(R.string.no_complete),Toast.LENGTH_SHORT).show();
+//                    else {
+//                        String account = username.getText().toString();
+//                        String password = userPassword.getText().toString();
+////                        userDBHelper = UserDBHelper.getInstance(this);
+//
+//                    }
+//                    break;
+//                case R.id.register:
+//                    Intent toReg = new Intent(LoginActivity.this, RegisterActivity.class);
+//                    startActivityForResult(toReg,1);
+//                    break;
+//            }
+//        }
+//    }
 
     private class Touch implements View.OnTouchListener {
 
@@ -103,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
         userPassword = (EditText) findViewById(R.id.userPassword);
         login_bt = (Button) findViewById(R.id.login_bt);
         register = (TextView) findViewById(R.id.register);
-        handler = new MyHandler();
     }
 
     @Override

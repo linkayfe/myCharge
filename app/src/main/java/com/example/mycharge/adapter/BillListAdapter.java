@@ -115,6 +115,7 @@ public class BillListAdapter extends BaseAdapter implements AdapterView.OnItemCl
         notifyDataSetChanged(); // 通知适配器发生了数据变化
         // 获得数据库帮助器的实例
         BillDBHelper helper = BillDBHelper.getInstance(mContext);
+        helper.getWritableDatabase();
         helper.delete(bill.getXuhao()); // 从数据库删除指定序号的账单
     }
 

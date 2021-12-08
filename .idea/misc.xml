@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Studio/MyCharge/app/src/main/res/drawable/list_selector.xml" value="0.15833333333333333" />
         <entry key="..\:/Android Studio/MyCharge/app/src/main/res/layout/activity_base_adapter.xml" value="0.2536231884057971" />
         <entry key="..\:/Android Studio/MyCharge/app/src/main/res/layout/activity_bill_pager.xml" value="0.2536231884057971" />
         <entry key="..\:/Android Studio/MyCharge/app/src/main/res/layout/activity_fragment_dynamic.xml" value="0.2536231884057971" />

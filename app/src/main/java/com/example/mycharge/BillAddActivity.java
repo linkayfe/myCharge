@@ -36,11 +36,16 @@ public class BillAddActivity extends AppCompatActivity implements
     private int xuhao; // 如果序号有值，说明已存在该账单
     private Calendar calendar = Calendar.getInstance(); // 获取日历实例，里面包含了当前的年月日
     private BillDBHelper mBillHelper; // 声明一个账单数据库的帮助器对象
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_add);
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("username");
+
         TextView tv_title = findViewById(R.id.tv_title);
         TextView tv_option = findViewById(R.id.tv_option);
         tv_date = findViewById(R.id.tv_date);
@@ -63,6 +68,7 @@ public class BillAddActivity extends AppCompatActivity implements
         super.onResume();
         xuhao = getIntent().getIntExtra("xuhao", -1);
         mBillHelper = BillDBHelper.getInstance(this); // 获取账单数据库的帮助器对象
+        mBillHelper.getWritableDatabase();
         if (xuhao != -1) { // 序号有值，就展示数据库里的账单详情
             List<BillInfo> bill_list = (List<BillInfo>) mBillHelper.queryById(xuhao);
             if (bill_list.size() > 0) { // 已存在该账单
@@ -91,6 +97,7 @@ public class BillAddActivity extends AppCompatActivity implements
             finish(); // 关闭当前页面
         } else if (v.getId() == R.id.tv_option) {
             Intent intent = new Intent(this, BillPagerActivity.class);
+            intent.putExtra("username",username);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 设置启动标志
             startActivity(intent); // 跳到账单列表页面
         } else if (v.getId() == R.id.tv_date) {
@@ -130,7 +137,7 @@ public class BillAddActivity extends AppCompatActivity implements
         bill.setType(mBillType);
         bill.setDesc(et_desc.getText().toString());
         bill.setAmount(Double.parseDouble(et_amount.getText().toString()));
-        mBillHelper.save(bill); // 把账单信息保存到数据库
+        mBillHelper.save(bill,username); // 把账单信息保存到数据库
         Toast.makeText(this, "已添加账单", Toast.LENGTH_SHORT).show();
         resetPage(); // 重置页面
     }

@@ -3,13 +3,13 @@ package com.example.mycharge.bean;
 public class UserInfo {
 
     private long userId;
-    private int username;
+    private String username;
     private String password;
 
     public UserInfo() {
     }
 
-    public UserInfo(long id, int username, String password) {
+    public UserInfo(long id, String username, String password) {
         this.userId = id;
         this.username = username;
         this.password = password;
@@ -32,11 +32,11 @@ public class UserInfo {
         this.userId = id;
     }
 
-    public int getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(int username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 

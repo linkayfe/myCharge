@@ -15,10 +15,11 @@ import java.util.List;
 public class BillDBHelper extends AboutBillDbHelper {
     private static String table_name = "bill_info";
 
-    public BillDBHelper(Context context) {
-        super(context, db_name, null, 1);
+    private BillDBHelper(Context context) {
+        super(context, db_name, null, 8);
         mTableName = table_name;
-        mSelectSQL = String.format("select rowid,_id,date,month,type,amount,desc,create_time,update_time from %s where "
+        mSelectSQL = String.format("select rowid,_id,date,month,type,amount,desc,create_time,update_time" +
+                        " from %s where "
                 , mTableName);
     }
 
@@ -53,6 +54,7 @@ public class BillDBHelper extends AboutBillDbHelper {
             cv.put("desc", info.getDesc());
             cv.put("create_time", info.getCreate_time());
             cv.put("update_time", info.getUpdate_time());
+            cv.put("user_id",info.getUserId());
             Log.d(TAG, "month="+info.getMonth());
             // 执行插入记录动作，该语句返回插入记录的行号
             result = mWriteDB.insert(mTableName, "", cv);
@@ -109,25 +111,34 @@ public class BillDBHelper extends AboutBillDbHelper {
         return infoList;
     }
 
-    public List<BillInfo> queryByMonth(int month) {
-        return query("month="+month+" order by date asc");
+    public List<BillInfo> queryByMonth(int month,String username) {
+        Long id = UserDBHelper.getIdByUsername(username);
+        return query("month="+month+" and user_id="+id+" order by date asc");
     }
 
-    public void save(BillInfo bill) {
+    public void save(BillInfo bill,String username) {
+        //通过username获取用户id
+        Long id = UserDBHelper.getIdByUsername(username);
+        bill.setUserId(id);
         // 根据序号寻找对应的账单记录
         List<BillInfo> bill_list = (List<BillInfo>) queryById(bill.getXuhao());
         BillInfo info = null;
         if (bill_list.size() > 0) { // 有找到账单记录
             info = bill_list.get(0);
         }
-        if (info != null) { // 已存在该账单信息，则更新账单
+        // 已存在该账单信息，则更新账单
+        if (info != null) {
             bill.setRowid(info.getRowid());
             bill.setCreate_time(info.getCreate_time());
             bill.setUpdate_time(DateUtil.getNowDateTime(""));
-            update(bill); // 更新数据库记录
-        } else { // 未存在该账单信息，则添加账单
+            // 更新数据库记录
+            update(bill);
+        }
+        // 未存在该账单信息，则添加账单
+        else {
             bill.setCreate_time(DateUtil.getNowDateTime(""));
-            insert(bill); // 添加数据库记录
+            // 添加数据库记录
+            insert(bill);
         }
     }
 }

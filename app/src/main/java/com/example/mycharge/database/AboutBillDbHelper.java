@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.List;
 
 @SuppressLint("DefaultLocale")
-abstract public class AboutBillDbHelper extends SQLiteOpenHelper {
+public class AboutBillDbHelper extends SQLiteOpenHelper {
 	protected static String TAG = "AboutBillDbHelper";
 	protected static String db_name = "bill.sqlite";
 	protected Context mContext;
@@ -22,12 +22,14 @@ abstract public class AboutBillDbHelper extends SQLiteOpenHelper {
 	protected String mCreateSQL;
 	protected String mSelectSQL;
 
-	public AboutBillDbHelper(Context context, String name, CursorFactory factory, int version) {
+	public AboutBillDbHelper(Context context, String name,
+							 CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		mContext = context;
 		mVersion = version;
 		mWriteDB = this.getWritableDatabase();
 		mReadDB = this.getReadableDatabase();
+		Log.d(TAG,"AboutBillDbHelper============================================================");
 	}
 
 	@Override
@@ -38,13 +40,17 @@ abstract public class AboutBillDbHelper extends SQLiteOpenHelper {
 				+ "amount DOUBLE NOT NULL," + "desc VARCHAR NOT NULL,"
 				+ "create_time VARCHAR NOT NULL," + "update_time VARCHAR NULL"
 				+ "user_id INTEGER NOT NULL"
-				+ ");";
+				+ ")";
 		Log.d(TAG, "create_sql:" + mCreateSQL);
 		db.execSQL(mCreateSQL);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		String sql = "ALTER TABLE bill_info ADD user_id INTEGER NOT NULL";
+		Log.d(TAG,"===================================================update_sql:"+sql);
+		System.out.println("=======================================sql="+sql);
+		db.execSQL(sql);
 	}
 
 	// 根据序号删除记录
@@ -61,7 +67,9 @@ abstract public class AboutBillDbHelper extends SQLiteOpenHelper {
 		mWriteDB.execSQL(delete_sql);
 	}
 
-	abstract protected List<?> query(String sql);
+	protected List<?> query(String sql){
+		return null;
+	}
 
 	// 根据序号查询记录
 	public List<?> queryById(int id) {
