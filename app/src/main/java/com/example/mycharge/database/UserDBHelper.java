@@ -48,9 +48,19 @@ public class UserDBHelper extends AboutUserDbHelper{
             mHelper.mReadDB = mHelper.getReadableDatabase();
         }
         Cursor cursor = mHelper.mReadDB.rawQuery(sql,null);
+        Log.d(TAG,"getIdByUsernameSql="+sql);
         if (cursor.moveToFirst()) {
             return cursor.getLong(0);
         } else {
+            return -1L;
+        }
+    }
+    public Long getUserId(String username){
+        String sql = "select user_id from user_info where username = '"+username+"'";
+        Cursor cursor = mReadDB.rawQuery(sql,null);
+        if (cursor.moveToFirst()){
+            return cursor.getLong(0);
+        }else {
             return -1L;
         }
     }

@@ -111,15 +111,13 @@ public class BillDBHelper extends AboutBillDbHelper {
         return infoList;
     }
 
-    public List<BillInfo> queryByMonth(int month,String username) {
-        Long id = UserDBHelper.getIdByUsername(username);
-        return query("month="+month+" and user_id="+id+" order by date asc");
+    public List<BillInfo> queryByMonth(int month,Long userId) {
+        return query("month="+month+" and user_id="+userId+" order by date asc");
     }
 
-    public void save(BillInfo bill,String username) {
+    public void save(BillInfo bill,Long userId) {
         //通过username获取用户id
-        Long id = UserDBHelper.getIdByUsername(username);
-        bill.setUserId(id);
+        bill.setUserId(userId);
         // 根据序号寻找对应的账单记录
         List<BillInfo> bill_list = (List<BillInfo>) queryById(bill.getXuhao());
         BillInfo info = null;

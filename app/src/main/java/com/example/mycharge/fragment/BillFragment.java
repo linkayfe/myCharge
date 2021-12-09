@@ -25,15 +25,15 @@ public class BillFragment extends Fragment {
     private int mMonth; // 当前选择的月份
     private ListView lv_bill; // 声明一个列表视图对象
     private List<BillInfo> mBillList = new ArrayList<BillInfo>(); // 账单信息列表
-    private static String username;
+    private static Long userId;
 
     // 获取该碎片的一个实例
-    public static BillFragment newInstance(int month,String theUsername) {
+    public static BillFragment newInstance(int month,Long theUserId) {
         BillFragment fragment = new BillFragment(); // 创建该碎片的一个实例
         Bundle bundle = new Bundle(); // 创建一个新包裹
         bundle.putInt("month", month); // 往包裹存入月份
         fragment.setArguments(bundle); // 把包裹塞给碎片
-        username = theUsername;
+        userId = theUserId;
         return fragment; // 返回碎片实例
     }
 
@@ -55,7 +55,7 @@ public class BillFragment extends Fragment {
         super.onStart();
         // 获得数据库帮助器的实例
         BillDBHelper helper = BillDBHelper.getInstance(mContext);
-        mBillList = helper.queryByMonth(mMonth,username); // 查询指定月份的账单列表
+        mBillList = helper.queryByMonth(mMonth,userId); // 查询指定月份的账单列表
         if (mBillList!=null && mBillList.size()>0) {
             double income=0, expend=0;
             for (BillInfo bill : mBillList) {

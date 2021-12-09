@@ -37,7 +37,7 @@ public abstract class AboutUserDbHelper extends SQLiteOpenHelper {
 
         mCreateSQL = "CREATE TABLE IF NOT EXISTS user_info (" +
                 "user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "username VARCHAR NOT NULL," +
+                "username VARCHAR NOT NULL UNIQUE," +
                 "password VARCHAR NOT NULL);";
         Log.d(TAG,"user_sql:"+mCreateSQL);
         db.execSQL(mCreateSQL);
@@ -51,7 +51,7 @@ public abstract class AboutUserDbHelper extends SQLiteOpenHelper {
     protected abstract UserInfo query(String sql);
 
     public UserInfo queryByUserId(String username,String password){
-        String sql = " username="+username+" and password="+password+";";
+        String sql = " username='"+username+"' and password='"+password+"';";
         return query(sql);
     }
 

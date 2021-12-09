@@ -26,6 +26,7 @@ public class BillPagerActivity extends AppCompatActivity implements
     private ViewPager vp_bill; // 声明一个翻页视图对象
     private Calendar calendar = Calendar.getInstance(); // 获取日历实例，里面包含了当前的年月日
     private String username;
+    private Long userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,8 @@ public class BillPagerActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
-        Log.d(TAG,"username = "+username);
+        userId = Long.parseLong(intent.getStringExtra("userId"));
+        Log.d(TAG,"username = "+username+"\nuserId = "+userId);
 
         TextView tv_title = findViewById(R.id.tv_title);
         TextView tv_option = findViewById(R.id.tv_option);
@@ -58,6 +60,7 @@ public class BillPagerActivity extends AppCompatActivity implements
         } else if (v.getId() == R.id.tv_option) {
             Intent intent = new Intent(this, BillAddActivity.class);
             intent.putExtra("username",username);
+            intent.putExtra("userId",userId+"");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 设置启动标志
             startActivity(intent); // 跳到账单填写页面
         } else if (v.getId() == R.id.tv_month) {
@@ -82,13 +85,12 @@ public class BillPagerActivity extends AppCompatActivity implements
 
     // 初始化翻页视图
     private void initViewPager() {
-        // 从布局视图中获取名叫pts_bill的翻页标签栏
         PagerTabStrip pts_bill = findViewById(R.id.pts_bill);
         // 设置翻页标签栏的文本大小
         pts_bill.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         // 构建一个商品图片的翻页适配器
         BillPagerAdapter adapter = new BillPagerAdapter(getSupportFragmentManager(),
-                calendar.get(Calendar.YEAR),username);
+                calendar.get(Calendar.YEAR),userId);
         vp_bill.setAdapter(adapter); // 设置翻页视图的适配器
         vp_bill.setCurrentItem(calendar.get(Calendar.MONTH)); // 设置翻页视图显示第几页
         vp_bill.addOnPageChangeListener(this); // 给翻页视图添加页面变更监听器

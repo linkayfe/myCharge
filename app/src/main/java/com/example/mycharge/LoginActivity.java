@@ -68,12 +68,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String password = userPassword.getText().toString();
                     userDBHelper = UserDBHelper.getInstance(this);
                     UserInfo userInfo = userDBHelper.queryByUserId(account,password);
-                    if (userInfo == null){
+                    if (userInfo.getUsername()==null){
                         Toast.makeText(getApplication(),getResources()
                                 .getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
                     }else {
                         Intent toCharge = new Intent(this,BillPagerActivity.class);
                         toCharge.putExtra("username",account);
+                        toCharge.putExtra("userId",userDBHelper.getUserId(account)+"");
                         startActivity(toCharge);
                     }
                 }

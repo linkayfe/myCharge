@@ -29,7 +29,6 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 		mVersion = version;
 		mWriteDB = this.getWritableDatabase();
 		mReadDB = this.getReadableDatabase();
-		Log.d(TAG,"AboutBillDbHelper============================================================");
 	}
 
 	@Override
@@ -38,7 +37,7 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 				+ "_id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,"
 				+ "date VARCHAR NOT NULL," + "month INTEGER NOT NULL," + "type INTEGER NOT NULL,"
 				+ "amount DOUBLE NOT NULL," + "desc VARCHAR NOT NULL,"
-				+ "create_time VARCHAR NOT NULL," + "update_time VARCHAR NULL"
+				+ "create_time VARCHAR NOT NULL," + "update_time VARCHAR NULL,"
 				+ "user_id INTEGER NOT NULL"
 				+ ")";
 		Log.d(TAG, "create_sql:" + mCreateSQL);
@@ -47,22 +46,13 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		String sql = "ALTER TABLE bill_info ADD user_id INTEGER NOT NULL";
-		Log.d(TAG,"===================================================update_sql:"+sql);
-		System.out.println("=======================================sql="+sql);
-		db.execSQL(sql);
+//		String sql = "ALTER TABLE bill_info ADD user_id INTEGER NOT NULL";
+//		db.execSQL(sql);
 	}
 
 	// 根据序号删除记录
 	public void delete(int id) {
 		String delete_sql = String.format("delete from %s where _id=%d;", mTableName, id);
-		Log.d(TAG, "delete sql="+delete_sql);
-		mWriteDB.execSQL(delete_sql);
-	}
-
-	// 根据行号删除记录
-	public void deleteByRowid(long rowid) {
-		String delete_sql = String.format("delete from %s where rowid=%d;", mTableName, rowid);
 		Log.d(TAG, "delete sql="+delete_sql);
 		mWriteDB.execSQL(delete_sql);
 	}
@@ -77,25 +67,5 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 		return query(sql);
 	}
 
-	// 根据行号查询记录
-	public List<?> queryByRowid(long rowid) {
-		String sql = " rowid=" + rowid + ";";
-		return query(sql);
-	}
 
-	// 查询所有记录
-	public List<?> queryAll() {
-		String sql = " 1=1;";
-		return query(sql);
-	}
-
-	// 统计记录数量
-	public int queryCount(String sql) {
-		int count = 0;
-		Cursor cursor = mReadDB.rawQuery(sql, null);
-		count = cursor.getCount();
-		cursor.close();
-		Log.d(TAG, "count="+count+",sql="+sql);
-		return count;
-	}
 }

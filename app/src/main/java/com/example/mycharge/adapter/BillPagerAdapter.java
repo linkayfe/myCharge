@@ -9,13 +9,13 @@ import com.example.mycharge.fragment.BillFragment;
 
 public class BillPagerAdapter extends FragmentPagerAdapter {
     private int mYear; // 声明当前账单所处的年份
-    private String username;
+    private Long userId;
 
     // 碎片页适配器的构造方法
-    public BillPagerAdapter(FragmentManager fm, int year,String username) {
+    public BillPagerAdapter(FragmentManager fm, int year,Long userId) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mYear = year;
-        this.username = username;
+        this.userId = userId;
     }
 
     // 获取碎片Fragment的个数，一年有12个月
@@ -25,7 +25,7 @@ public class BillPagerAdapter extends FragmentPagerAdapter {
 
     // 获取指定月份的碎片Fragment
     public Fragment getItem(int position) {
-        return BillFragment.newInstance(mYear*100 + (position + 1),username);
+        return BillFragment.newInstance(mYear*100 + (position + 1),userId);
     }
 
     // 获得指定月份的标题文本
