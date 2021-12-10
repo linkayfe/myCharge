@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.List;
 
 @SuppressLint("DefaultLocale")
-public class AboutBillDbHelper extends SQLiteOpenHelper {
+public abstract class AboutBillDbHelper extends SQLiteOpenHelper {
 	protected static String TAG = "AboutBillDbHelper";
 	protected static String db_name = "bill.sqlite";
 	protected Context mContext;
@@ -35,9 +35,13 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		mCreateSQL = "CREATE TABLE IF NOT EXISTS bill_info ("
 				+ "_id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,"
-				+ "date VARCHAR NOT NULL," + "month INTEGER NOT NULL," + "type INTEGER NOT NULL,"
-				+ "amount DOUBLE NOT NULL," + "desc VARCHAR NOT NULL,"
-				+ "create_time VARCHAR NOT NULL," + "update_time VARCHAR NULL,"
+				+ "date VARCHAR NOT NULL,"
+				+ "month INTEGER NOT NULL,"
+				+ "type INTEGER NOT NULL,"
+				+ "amount DOUBLE NOT NULL,"
+				+ "describe VARCHAR NOT NULL,"
+				+ "create_time VARCHAR NOT NULL,"
+				+ "update_time VARCHAR NULL,"
 				+ "user_id INTEGER NOT NULL"
 				+ ")";
 		Log.d(TAG, "create_sql:" + mCreateSQL);
@@ -46,8 +50,6 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//		String sql = "ALTER TABLE bill_info ADD user_id INTEGER NOT NULL";
-//		db.execSQL(sql);
 	}
 
 	// 根据序号删除记录
@@ -57,9 +59,7 @@ public class AboutBillDbHelper extends SQLiteOpenHelper {
 		mWriteDB.execSQL(delete_sql);
 	}
 
-	protected List<?> query(String sql){
-		return null;
-	}
+	protected abstract List<?> query(String sql);
 
 	// 根据序号查询记录
 	public List<?> queryById(int id) {

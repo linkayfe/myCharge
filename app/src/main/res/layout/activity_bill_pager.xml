@@ -5,6 +5,13 @@
 
     <include layout="@layout/title_booking" />
 
+<!--    px（像素）
+        in（英寸）
+        mm（毫米）
+        pt（磅，1/72英寸）
+        dp（与设备无关的显示单位）
+        dip（就是dp）
+        sp（用于设置字体大小）-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal">
-
+<!--            android:orientation = "horizontal" 指定布局内控件排列方式为 水平排列-->
+<!--            android:orientation = "vertical" 指定布局内控件排列方式为 垂直排列-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

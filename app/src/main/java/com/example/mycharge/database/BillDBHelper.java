@@ -18,7 +18,7 @@ public class BillDBHelper extends AboutBillDbHelper {
     private BillDBHelper(Context context) {
         super(context, db_name, null, 8);
         mTableName = table_name;
-        mSelectSQL = String.format("select rowid,_id,date,month,type,amount,desc,create_time,update_time" +
+        mSelectSQL = String.format("select rowid,_id,date,month,type,amount,describe,create_time,update_time" +
                         " from %s where "
                 , mTableName);
     }
@@ -51,7 +51,7 @@ public class BillDBHelper extends AboutBillDbHelper {
             cv.put("month", info.getMonth());
             cv.put("type", info.getType());
             cv.put("amount", info.getAmount());
-            cv.put("desc", info.getDesc());
+            cv.put("describe", info.getDesc());
             cv.put("create_time", info.getCreate_time());
             cv.put("update_time", info.getUpdate_time());
             cv.put("user_id",info.getUserId());
@@ -73,7 +73,7 @@ public class BillDBHelper extends AboutBillDbHelper {
         cv.put("month", info.getMonth());
         cv.put("type", info.getType());
         cv.put("amount", info.getAmount());
-        cv.put("desc", info.getDesc());
+        cv.put("describe", info.getDesc());
         cv.put("create_time", info.getCreate_time());
         cv.put("update_time", info.getUpdate_time());
         // 执行更新记录动作，该语句返回更新的记录数量

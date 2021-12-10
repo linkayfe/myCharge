@@ -23,8 +23,9 @@ public class BillPagerActivity extends AppCompatActivity implements
         View.OnClickListener, DatePickerDialog.OnDateSetListener, ViewPager.OnPageChangeListener {
     protected static String TAG = "BillPagerActivity";
     private TextView tv_month;
-    private ViewPager vp_bill; // 声明一个翻页视图对象
-    private Calendar calendar = Calendar.getInstance(); // 获取日历实例，里面包含了当前的年月日
+    // 声明一个翻页视图对象
+    private ViewPager vp_bill;
+    private Calendar calendar = Calendar.getInstance();
     private String username;
     private Long userId;
 
@@ -47,7 +48,7 @@ public class BillPagerActivity extends AppCompatActivity implements
         tv_option.setOnClickListener(this);
         tv_month.setOnClickListener(this);
         tv_month.setText(DateUtil.getMonth(calendar));
-        // 从布局视图中获取名叫vp_bill的翻页视图
+
         vp_bill = findViewById(R.id.vp_bill);
         // 初始化翻页视图
         initViewPager();
@@ -61,16 +62,16 @@ public class BillPagerActivity extends AppCompatActivity implements
             Intent intent = new Intent(this, BillAddActivity.class);
             intent.putExtra("username",username);
             intent.putExtra("userId",userId+"");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 设置启动标志
-            startActivity(intent); // 跳到账单填写页面
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else if (v.getId() == R.id.tv_month) {
             // 构建一个日期对话框，该对话框已经集成了日期选择器
             // DatePickerDialog的第二个构造参数指定了日期监听器
             DatePickerDialog dialog = new DatePickerDialog(this, this,
-                    calendar.get(Calendar.YEAR), // 年份
-                    calendar.get(Calendar.MONTH), // 月份
-                    calendar.get(Calendar.DAY_OF_MONTH)); // 日子
-            dialog.show(); // 显示日期选择对话框
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            dialog.show();
         }
     }
 
@@ -80,7 +81,8 @@ public class BillPagerActivity extends AppCompatActivity implements
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         tv_month.setText(DateUtil.getMonth(calendar));
-        vp_bill.setCurrentItem(month); // 设置翻页视图显示第几页
+        // 设置翻页视图显示第几页
+        vp_bill.setCurrentItem(month);
     }
 
     // 初始化翻页视图
@@ -91,9 +93,12 @@ public class BillPagerActivity extends AppCompatActivity implements
         // 构建一个商品图片的翻页适配器
         BillPagerAdapter adapter = new BillPagerAdapter(getSupportFragmentManager(),
                 calendar.get(Calendar.YEAR),userId);
-        vp_bill.setAdapter(adapter); // 设置翻页视图的适配器
-        vp_bill.setCurrentItem(calendar.get(Calendar.MONTH)); // 设置翻页视图显示第几页
-        vp_bill.addOnPageChangeListener(this); // 给翻页视图添加页面变更监听器
+        // 设置翻页视图的适配器
+        vp_bill.setAdapter(adapter);
+        // 设置翻页视图显示第几页
+        vp_bill.setCurrentItem(calendar.get(Calendar.MONTH));
+        // 给翻页视图添加页面变更监听器
+        vp_bill.addOnPageChangeListener(this);
     }
 
     // 翻页状态改变时触发

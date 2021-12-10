@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg"
+    android:background="@drawable/guide_bg1"
     android:focusableInTouchMode="true"
     android:clickable="true"
     tools:context="com.example.mycharge.LoginActivity"
@@ -79,13 +79,14 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_weight="1">
+
         <TextView
             android:id="@+id/register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/reg"
-            android:textColor="@color/blue"
+            android:textColor="@color/white"
             android:textSize="15sp" />
     </RelativeLayout>
 

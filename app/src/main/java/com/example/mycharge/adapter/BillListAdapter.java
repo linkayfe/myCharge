@@ -25,12 +25,14 @@ import java.util.List;
 public class BillListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener,
         AdapterView.OnItemLongClickListener{
     private static final String TAG = "BillListAdapter";
-    private Context mContext; // 声明一个上下文对象
-    private List<BillInfo> mBillList = new ArrayList<BillInfo>(); // 账单信息列表
+    private Context mContext;
+    private List<BillInfo> mBillList = new ArrayList<BillInfo>();
+    private Long userId;
 
-    public BillListAdapter(Context context, List<BillInfo> billList) {
+    public BillListAdapter(Context context, List<BillInfo> billList,Long userId) {
         mContext = context;
         mBillList = billList;
+        this.userId = userId;
     }
 
     @Override
@@ -65,25 +67,34 @@ public class BillListAdapter extends BaseAdapter implements AdapterView.OnItemCl
         BillInfo bill = mBillList.get(position);
         holder.tv_date.setText(bill.getDate());
         holder.tv_desc.setText(bill.getDesc());
-        if (bill.getDate().equals("合计")) {
+        if (bill.getDate().equals("总计")) {
             holder.tv_amount.setText(bill.getRemark());
         } else {
-            holder.tv_amount.setText(String.format("%s%d元", bill.getType()==0?"收入":"支出", (int) bill.getAmount()));
+            holder.tv_amount.setText(
+//                    String.format("%s%d元", bill.getType()==0?"收入":"支出"
+//                            , (int) bill.getAmount())
+                    String.format("%s"+bill.getAmount()+"元", bill.getType()==0?"收入":"支出"
+                            )
+            );
         }
         return convertView;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position >= mBillList.size()-1) { // 合计行不响应点击事件
+        // 合计行不响应点击事件
+        if (position >= mBillList.size()-1) {
             return;
         }
         Log.d(TAG, "onItemClick position=" + position);
         BillInfo bill = mBillList.get(position);
         // 以下跳转到账单填写页面
         Intent intent = new Intent(mContext, BillAddActivity.class);
-        intent.putExtra("xuhao", bill.getXuhao()); // 携带账单序号，表示已存在该账单
-        mContext.startActivity(intent); // 因为已存在该账单，所以跳过去实际会编辑账单
+        // 携带账单序号，表示已存在该账单
+        intent.putExtra("xuhao", bill.getXuhao());
+        intent.putExtra("userId",userId+"");
+        // 因为已存在该账单，所以跳过去实际会编辑账单
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -94,8 +105,8 @@ public class BillListAdapter extends BaseAdapter implements AdapterView.OnItemCl
         Log.d(TAG, "onItemLongClick position=" + position);
         BillInfo bill = mBillList.get(position); // 获得当前位置的账单信息
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        String desc = String.format("是否删除以下账单？\n%s %s%d %s", bill.getDate(),
-                bill.getType()==0?"收入":"支出", (int) bill.getAmount(), bill.getDesc());
+        String desc = String.format("是否删除以下账单？\n%s %s"+bill.getAmount()+" %s", bill.getDate(),
+                bill.getType()==0?"收入":"支出", bill.getDesc());
         builder.setMessage(desc); // 设置提醒对话框的消息文本
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override

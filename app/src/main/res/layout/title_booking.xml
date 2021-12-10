@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="#aaaaff" >
+    android:background="#008c8c" >
 
     <ImageView
         android:id="@+id/iv_back"
@@ -10,7 +10,8 @@
         android:layout_alignParentLeft="true"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_back" />
+        android:src="@drawable/ic_back"
+        />
 
     <TextView
         android:id="@+id/tv_title"
@@ -18,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/title"
         android:textSize="20sp" />
 
     <TextView

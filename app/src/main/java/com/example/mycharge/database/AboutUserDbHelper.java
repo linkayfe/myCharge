@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Base64;
 import android.util.Log;
 
 
@@ -34,7 +35,6 @@ public abstract class AboutUserDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         mCreateSQL = "CREATE TABLE IF NOT EXISTS user_info (" +
                 "user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "username VARCHAR NOT NULL UNIQUE," +
@@ -51,16 +51,17 @@ public abstract class AboutUserDbHelper extends SQLiteOpenHelper {
     protected abstract UserInfo query(String sql);
 
     public UserInfo queryByUserId(String username,String password){
-        String sql = " username='"+username+"' and password='"+password+"';";
+        String base64Pass = Base64.encodeToString(password.getBytes(), Base64.DEFAULT);
+        String sql = " username='"+username+"' and password='"+base64Pass+"';";
         return query(sql);
     }
 
     public boolean register(String username,String password){
+        String base64Pass = Base64.encodeToString(password.getBytes(), Base64.DEFAULT);
         ContentValues cv = new ContentValues();
         cv.put("username",username);
-        cv.put("password",password);
+        cv.put("password",base64Pass);
         Log.d(TAG,"username="+username);
-
         return mWriteDB.insert(mTableName,"",cv)!=-1;
     }
 }

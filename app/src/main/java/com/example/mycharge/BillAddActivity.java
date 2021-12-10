@@ -25,17 +25,21 @@ import java.util.Date;
 import java.util.List;
 
 public class BillAddActivity extends AppCompatActivity implements
-        RadioGroup.OnCheckedChangeListener, View.OnClickListener, DatePickerDialog.OnDateSetListener {
+        RadioGroup.OnCheckedChangeListener, View.OnClickListener,
+        DatePickerDialog.OnDateSetListener {
     private final static String TAG = "BillAddActivity";
     private TextView tv_date;
     private RadioButton rb_income;
     private RadioButton rb_expand;
     private EditText et_desc;
     private EditText et_amount;
-    private int mBillType = 1; // 账单类型。0 收入；1 支出
-    private int xuhao; // 如果序号有值，说明已存在该账单
-    private Calendar calendar = Calendar.getInstance(); // 获取日历实例，里面包含了当前的年月日
-    private BillDBHelper mBillHelper; // 声明一个账单数据库的帮助器对象
+    // 账单类型：0 收入  1 支出
+    private int mBillType = 1;
+    // 如果序号有值，说明已存在该账单
+    private int xuhao;
+    // 获取日历实例，里面包含了当前的年月日
+    private Calendar calendar = Calendar.getInstance();
+    private BillDBHelper mBillHelper;
     private String username;
     private Long userId;
 
@@ -70,50 +74,54 @@ public class BillAddActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         xuhao = getIntent().getIntExtra("xuhao", -1);
-        mBillHelper = BillDBHelper.getInstance(this); // 获取账单数据库的帮助器对象
+        mBillHelper = BillDBHelper.getInstance(this);
         mBillHelper.getWritableDatabase();
-        if (xuhao != -1) { // 序号有值，就展示数据库里的账单详情
+        // 序号有值，就展示数据库里的账单详情
+        if (xuhao != -1) {
             List<BillInfo> bill_list = (List<BillInfo>) mBillHelper.queryById(xuhao);
-            if (bill_list.size() > 0) { // 已存在该账单
-                BillInfo bill = bill_list.get(0); // 获取账单信息
+            if (bill_list.size() > 0) {
+                BillInfo bill = bill_list.get(0);
                 Date date = DateUtil.formatString(bill.getDate());
                 Log.d(TAG, "bill.date="+bill.getDate());
                 Log.d(TAG, "year="+date.getYear()+",month="+date.getMonth()+",day="+date.getDate());
                 calendar.set(Calendar.YEAR, date.getYear()+1900);
                 calendar.set(Calendar.MONTH, date.getMonth());
                 calendar.set(Calendar.DAY_OF_MONTH, date.getDate());
-                if (bill.getType() == 0) { // 收入
+                if (bill.getType() == 0) {
                     rb_income.setChecked(true);
-                } else { // 支出
+                } else {
                     rb_expand.setChecked(true);
                 }
-                et_desc.setText(bill.getDesc()); // 设置账单的描述文本
-                et_amount.setText(""+bill.getAmount()); // 设置账单的交易金额
+                et_desc.setText(bill.getDesc());
+                et_amount.setText(""+bill.getAmount());
             }
         }
-        tv_date.setText(DateUtil.getDate(calendar)); // 设置账单的发生时间
+        tv_date.setText(DateUtil.getDate(calendar));
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.iv_back) {
-            finish(); // 关闭当前页面
+            // 关闭当前页面
+            finish();
         } else if (v.getId() == R.id.tv_option) {
             Intent intent = new Intent(this, BillPagerActivity.class);
             intent.putExtra("username",username);
             intent.putExtra("userId",userId+"");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 设置启动标志
-            startActivity(intent); // 跳到账单列表页面
+            // 设置启动标志
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else if (v.getId() == R.id.tv_date) {
             // 构建一个日期对话框，该对话框已经集成了日期选择器。
             // DatePickerDialog的第二个构造参数指定了日期监听器
             DatePickerDialog dialog = new DatePickerDialog(this, this,
-                    calendar.get(Calendar.YEAR), // 年份
-                    calendar.get(Calendar.MONTH), // 月份
-                    calendar.get(Calendar.DAY_OF_MONTH)); // 日子
-            dialog.show(); // 显示日期选择对话框
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            // 显示日期选择对话框
+            dialog.show();
         } else if (v.getId() == R.id.btn_save) {
-            saveBill(); // 保存账单
+            saveBill();
         }
     }
 
@@ -132,8 +140,8 @@ public class BillAddActivity extends AppCompatActivity implements
 
     // 保存账单
     private void saveBill() {
-        //ViewUtil.hideAllInputMethod(this); // 隐藏输入法软键盘
-        ViewUtil.hideOneInputMethod(this, et_amount); // 隐藏输入法软键盘
+        // 隐藏输入法软键盘
+        ViewUtil.hideOneInputMethod(this, et_amount);
         BillInfo bill = new BillInfo();
         bill.setXuhao(xuhao);
         bill.setDate(tv_date.getText().toString());
@@ -141,9 +149,11 @@ public class BillAddActivity extends AppCompatActivity implements
         bill.setType(mBillType);
         bill.setDesc(et_desc.getText().toString());
         bill.setAmount(Double.parseDouble(et_amount.getText().toString()));
-        mBillHelper.save(bill,userId); // 把账单信息保存到数据库
+        // 把账单信息保存到数据库
+        mBillHelper.save(bill,userId);
         Toast.makeText(this, "已添加账单", Toast.LENGTH_SHORT).show();
-        resetPage(); // 重置页面
+        // 重置页面
+        resetPage();
     }
 
     // 重置页面

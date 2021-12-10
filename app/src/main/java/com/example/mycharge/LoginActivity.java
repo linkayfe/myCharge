@@ -2,11 +2,7 @@ package com.example.mycharge;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,7 +13,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mycharge.bean.UserInfo;
-import com.example.mycharge.database.BillDBHelper;
 import com.example.mycharge.database.UserDBHelper;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
@@ -49,10 +44,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         login_bt.setOnClickListener(this);
         register.setOnClickListener(this);
-
-        login_bt.setOnTouchListener(new Touch());
-        register.setOnTouchListener(new Touch());
-
     }
 
     @Override
@@ -86,86 +77,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-//    private class Click implements View.OnClickListener {
-//
-//        @Override
-//        public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.login_bt:
-//                    if("".equals(username.getText().toString()) || "".equals(userPassword.getText().toString()))
-//                        Toast.makeText(getApplication(),getResources().getString(R.string.no_complete),Toast.LENGTH_SHORT).show();
-//                    else {
-//                        String account = username.getText().toString();
-//                        String password = userPassword.getText().toString();
-////                        userDBHelper = UserDBHelper.getInstance(this);
-//
-//                    }
-//                    break;
-//                case R.id.register:
-//                    Intent toReg = new Intent(LoginActivity.this, RegisterActivity.class);
-//                    startActivityForResult(toReg,1);
-//                    break;
-//            }
-//        }
-//    }
-
-    private class Touch implements View.OnTouchListener {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (v.getId()) {
-                case R.id.login_bt:
-                    if(event.getAction() == MotionEvent.ACTION_DOWN)
-                        login_bt.setBackgroundColor(Color.argb(80,19,86,255));
-                    else if(event.getAction() == MotionEvent.ACTION_UP)
-                        login_bt.setBackgroundResource(R.drawable.bt_bg);
-                    break;
-                case R.id.register:
-                    if(event.getAction() == MotionEvent.ACTION_DOWN)
-                        register.setTextColor(Color.BLUE);
-                    else if(event.getAction() == MotionEvent.ACTION_UP)
-                        register.setTextColor(Color.BLACK);
-                    break;
-
-            }
-            return false;
-        }
-    }
-
-    private void init() {
-        username = (EditText) findViewById(R.id.username);
-        userPassword = (EditText) findViewById(R.id.userPassword);
-        login_bt = (Button) findViewById(R.id.login_bt);
-        register = (TextView) findViewById(R.id.register);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private class MyHandler extends Handler {
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (1) {
-                case 1:
-                    Toast.makeText(getApplication(),"登录成功",Toast.LENGTH_SHORT).show();
-                    Intent toMain = new Intent(LoginActivity.this, MainActivity.class);
-                    toMain.putExtra("isVisit",false);
-                    startActivity(toMain);
-                    finish();
-                    break;
-                case 2:
-                    Toast.makeText(getApplication(),"用户不存在",Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    Toast.makeText(getApplication(),"密码错误",Toast.LENGTH_SHORT).show();
-                    break;
-                case 4:
-                    Toast.makeText(getApplication(),"网络错误",Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    }
 }
